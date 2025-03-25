@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void log_syscall(const char *syscall_name, int status) {
+    FILE *log_file = fopen("logs/syscall_logs.txt", "a"); // Append mode
+
+    if (log_file == NULL) {
+        perror("Error opening log file");
+        return;
+    }
+
+    time_t now = time(NULL);
+    char *timestamp = ctime(&now);
+    timestamp[strlen(timestamp) - 1] = '\0'; // Remove newline
+
+    fprintf(log_file, "[%s] System Call: %s | Status: %d\n", timestamp, syscall_name, status);
+    fclose(log_file);
+}
