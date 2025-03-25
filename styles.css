@@ -114,34 +114,45 @@
     margin: 4rem auto;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    max-width: 900px;
+    max-width: 1000px;
     text-align: center;
     animation: fadeInUp 1.2s ease-in-out;
+    background-image: url(./feature.jpg);
+    
+    
   }
 
+  
   h2 {
     font-size: 2.5rem;
     font-weight: 600;
     color: #1f2937;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0rem;
+    padding-top: 2rem;
+    background-color: aliceblue;
+    border-radius: 30px;
   }
 
   ul {
     list-style: none;
-    padding: 0;
+    padding-bottom: 2rem;
+    background-color: aliceblue;
+    border-radius: 30px;
   }
 
   li {
     font-size: 1.2rem;
     margin-bottom: 0.75rem;
-    padding-left: 1.8rem;
+    padding-left: 5rem;
     position: relative;
+    text-align: left;
+    
   }
 
   li::before {
-    content: '✔';
+    content: '➤';
     position: absolute;
-    left: 0;
+    left: 50px;
     font-size: 1.2rem;
     color: #3b82f6;
   }
