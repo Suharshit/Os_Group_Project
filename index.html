@@ -40,5 +40,23 @@
     </ul>
   </section>
 
+  <!-- File Operations -->
+  <section id="column" class="sec">
+    <h2 class="h2">File Operations</h2>
+    <label>Username:</label>
+    <input type="text" id="username"><br><br>
+
+    <label>Filename:</label>
+    <input type="text" id="filename"><br><br>
+
+    <button class="fbtn" onclick="openFile()">Open File</button>
+    <button class="fbtn" onclick="readFile()">Read File</button>
+    <button class="fbtn" onclick="writeFile()">Write to File</button>
+
+    <br><br>
+    <textarea class="textarea" id="content" placeholder="Enter content to write"></textarea>
+    <h3>File Output:</h3>
+    <pre id="output"></pre>
+</section>
 </body>
 </html>
