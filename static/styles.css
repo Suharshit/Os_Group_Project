@@ -322,12 +322,12 @@ textarea {
 
 textarea:focus {
   outline: none;
-  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 0px 10px rgba(253, 253, 253, 0.5);
 }
 
 /* ===== Output Box Styling ===== */
 pre#output {
-  background-color: rgba(216, 214, 217, 0.964);
+  background-color: rgba(254, 253, 255, 0.964);
   padding: 15px;
   border-radius: 8px;
   min-height: 60px;
@@ -335,7 +335,7 @@ pre#output {
   font-family: monospace;
   text-align: left;
   word-wrap: break-word;
-  color: #fff;
+  
 }
 
 
@@ -352,21 +352,20 @@ pre#output {
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
 }
 
 label {
-  font-weight: 600;
+  font-size: 30px;
   margin-top: 10px;
-  display: block;
+  display:flex
 }
 
-.form-control {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+h3{
+  display: flex;
+  font-size: 30px;
 }
+
 
 .button-group {
   display: flex;
@@ -390,7 +389,7 @@ textarea {
   margin-top: 10px;
   padding: 10px;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #f0eaea;
 }
 
 pre {
@@ -473,4 +472,38 @@ pre {
 .border-danger {
   border: 2px solid red !important;
   box-shadow: 0 0 5px red;
+}
+
+
+
+/* Footer */
+.footer {
+  background: rgb(4, 46, 105);
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -164,7 +164,6 @@ function showColumn() {
             
             <label>Filename:</label>
             <input type="text" id="filename" class="form-control">
-            
             <div class="button-group">
                 <button class="btn btn-info" onclick="setPassword()">Set Password</button>
                 <button class="btn btn-primary" onclick="openFile()">Open File</button>
@@ -194,17 +193,36 @@ function showColumn() {
             <li>Simplified interface for easier integration</li>
             <li>Input validation to prevent attacks</li>
             <li>Privilege-based access control</li>
-            <li>Sandboxing to isolate processes</li>
+            <li>User friendly system call interface</li>
             <li>Secure logging and monitoring</li>
         </ul>
     </section>
  
     <!-- Architecture Section -->
-  <section id="architecture" class="section">
-    <h2>System Architecture</h2>
-    <div class="ap"><p>The secure syscall interface consists of a kernel layer and a user-space library. The kernel layer validates inputs, checks privileges, and manages access.</p></div>
-    <img src="./System Architecture.png" alt="System Architecture" class="diagram">
+    <section id="architecture" class="section">
+        <h2>System Architecture</h2>
+        <div class="ap">
+            <p>The secure syscall interface consists of a kernel layer and a user-space library. The kernel layer validates inputs, checks privileges, and manages access.</p>
+        </div>
+        <img src="{{ url_for('static', filename='System Architecture.png') }}" alt="System Architecture" class="diagram">
+    </section>
+
+    <!-- Contact Section -->
+  <section id="contact" class="section">
+    <h2>Contact</h2>
+    <div class="ap">
+        <p>For more information or to contribute to the project:</p>
+    </div>
+    <ul>
+      <li><a href="https://github.com/Suharshit/Os_Group_Project.git">GitHub Repository</a></li>
+      <li><a href="mailto:your-email@example.com">Email</a></li>
+    </ul>
   </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    © 2025 Secure Syscall Interface | All Rights Reserved
+  </footer>
 
 </body>
 </html>
