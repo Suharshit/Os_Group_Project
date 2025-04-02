@@ -97,6 +97,31 @@ async function deleteFile() {
     }
 }
 
+function getProcessValues() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const process_name = document.getElementById("filename").value.trim();
+
+    if (!username || !password || !process_name) {
+        showMessage("⚠️ All fields are required!", "danger");
+        return null;
+    }
+
+    return { username, password, process_name };
+}
+
+async function forkProcess() {
+    const input = getProcessValues();
+    if (input) {
+        await handleRequest("/fork_process", input, (data) => {
+            let outputText = `Fork succeeded!\n`;
+            outputText += `Parent PID: ${data.parent_pid}\n`;
+            outputText += `Child PID: ${data.child_pid}\n`;
+            document.getElementById("output").innerText = outputText;
+        });
+    }
+}
+
 async function listFiles() {
     showLoading(true);
     try {
