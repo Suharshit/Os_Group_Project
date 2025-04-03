@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 import os
 import json
+import shutil
 
 app = Flask(__name__)
 FILES_DIRECTORY = "files"
@@ -133,6 +134,7 @@ def delete_file():
 def list_files():
     files = os.listdir(FILES_DIRECTORY)
     return jsonify({"status": "success", "files": files})
+
     
 @app.route("/add_user", methods=["POST"])
 def add_user():
@@ -188,6 +190,69 @@ def fork_process():
             return jsonify({"status": "error", "message": f"Process creation failed: {str(e)}"})
     
     return jsonify({"status": "error", "message": "Invalid credentials!"})
+
+
+@app.route("/getcwd", methods=["GET"])
+def get_current_working_directory():
+    return jsonify({"status": "success", "cwd": os.getcwd()})
+
+@app.route("/stat", methods=["POST"])
+def get_file_stat():
+    data = request.json
+    filename = data.get("filename")
+    
+    if not filename:
+        return jsonify({"status": "error", "message": "Filename is required!"})
+    
+    file_path = os.path.join(FILES_DIRECTORY, filename)
+    
+    if not os.path.exists(file_path):
+        return jsonify({"status": "error", "message": "File does not exist!"})
+    
+    file_stat = os.stat(file_path)
+    return jsonify({
+        "status": "success",
+        "size": file_stat.st_size,
+        "last_modified": file_stat.st_mtime,
+        "permissions": file_stat.st_mode
+    })
+
+@app.route("/mkdir", methods=["POST"])
+def create_directory():
+    data = request.json
+    dirname = data.get("dirname")
+    
+    if not dirname:
+        return jsonify({"status": "error", "message": "Directory name is required!"})
+    
+    dir_path = os.path.join(FILES_DIRECTORY, dirname)
+    
+    try:
+        os.mkdir(dir_path)
+        return jsonify({"status": "success", "message": "Directory created successfully!"})
+    except FileExistsError:
+        return jsonify({"status": "error", "message": "Directory already exists!"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+
+@app.route("/rmtree", methods=["POST"])
+def remove_directory():
+    data = request.json
+    dirname = data.get("dirname")
+    
+    if not dirname:
+        return jsonify({"status": "error", "message": "Directory name is required!"})
+    
+    dir_path = os.path.join(FILES_DIRECTORY, dirname)
+    
+    if not os.path.exists(dir_path):
+        return jsonify({"status": "error", "message": "Directory does not exist!"})
+    
+    try:
+        shutil.rmtree(dir_path)
+        return jsonify({"status": "success", "message": "Directory removed successfully!"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
 
 
 if __name__ == "__main__":

@@ -143,6 +143,48 @@ async function listFiles() {
     }
 }
 
+async function getCWD() {
+    showLoading(true);
+    try {
+        const response = await fetch("/getcwd", { method: "GET" });
+        const data = await response.json();
+        document.getElementById("output").innerText = `Current Directory: ${data.cwd};`;
+    } catch (error) {
+        showMessage("Failed to get current working directory.", "danger");
+    } finally {
+        showLoading(false);
+    }
+}
+
+async function getFileStat() {
+    const filename = document.getElementById("filename").value.trim();
+    if (!filename) {
+        showMessage("⚠️ Filename is required!", "danger");
+        return;
+    }
+    await handleRequest("/stat", { filename }, (data) => {
+        document.getElementById("output").innerText = `Size: ${data.size} bytes\nLast Modified: ${new Date(data.last_modified * 1000)}\nPermissions: ${data.permissions}`;
+    });
+}
+
+async function createDirectory() {
+    const dirname = document.getElementById("filename").value.trim();
+    if (!dirname) {
+        showMessage("⚠️ Directory name is required!", "danger");
+        return;
+    }
+    await handleRequest("/mkdir", { dirname });
+}
+
+async function removeDirectory() {
+    const dirname = document.getElementById("filename").value.trim();
+    if (!dirname) {
+        showMessage("⚠️ Directory name is required!", "danger");
+        return;
+    }
+    await handleRequest("/rmtree", { dirname });
+}
+
 function showLoading(isLoading) {
     const buttons = document.querySelectorAll("button");
     buttons.forEach(btn => btn.disabled = isLoading);
@@ -200,6 +242,14 @@ function showColumn() {
             <div class="button-group">
                 <button class="btn btn-danger" onclick="deleteFile()">Delete File</button>
                 <button class="btn btn-dark" onclick="listFiles()">List Files</button>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="getCWD()">Get Current Directory</button>
+                <button class="btn btn-secondary" onclick="getFileStat()">Get File Info</button>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-success" onclick="createDirectory()">Create Directory</button>
+                <button class="btn btn-danger" onclick="removeDirectory()">Delete Directory</button>
             </div>
         </div>
 
