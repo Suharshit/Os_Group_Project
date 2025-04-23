@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Call Logs - Security Monitor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>System Call Security Monitor</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('logs') }}" class="active">Logs</a></li>
+                    <!-- <li><a href="{{ url_for('policies') }}">Security Policies</a></li> -->
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section class="card">
+                <h2>System Call Logs</h2>
+                <div class="filter-controls">
+                    <div class="form-group">
+                        <label for="filter-process">Filter by Process:</label>
+                        <input type="text" id="filter-process" placeholder="Process name...">
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-syscall">Filter by System Call:</label>
+                        <input type="text" id="filter-syscall" placeholder="System call name...">
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-status">Filter by Status:</label>
+                        <select id="filter-status">
+                            <option value="">All</option>
+                            <option value="success">Success</option>
+                            <option value="error">Error</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Process</th>
+                                <th>System Call</th>
+                                <th>Calls</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table">
+                            {% for log in logs %}
+                            <tr class="log-row {{ log.status }}">
+                                <td>{{ log.timestamp.split('T')[1].split('.')[0] }}</td>
+                                <td>{{ log.process_name }}</td>
+                                <td>{{ log.syscall_name }}</td>
+                                <td>{{ json.loads(log.args).calls }}</td>
+                                <td>
+                                    <span class="status-badge {{ log.status }}">
+                                        {{ log.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>System Call Analysis</h2>
+                <div id="log-stats">
+                    <div class="stat-item">
+                        <h3>Total Logs</h3>
+                        <p class="stat-value" id="total-logs">{{ logs|length }}</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>Success Rate</h3>
+                        <p class="stat-value" id="success-rate">
+                            {% set success_count = logs|selectattr('status', 'eq', 'success')|list|length %}
+                            {% if logs|length > 0 %}
+                                {{ (success_count / logs|length * 100)|round(1) }}%
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>Unique Processes</h3>
+                        <p class="stat-value" id="unique-processes">
+                            {{ logs|map(attribute='process_name')|unique|list|length }}
+                        </p>
+                    </div>
+                </div>
+                <div id="logs-chart-container">
+                    <canvas id="calls-by-type"></canvas>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 System Call Security Monitor. For educational purposes only.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Simple filtering functionality
+        document.getElementById('filter-process').addEventListener('input', filterLogs);
+        document.getElementById('filter-syscall').addEventListener('input', filterLogs);
+        document.getElementById('filter-status').addEventListener('change', filterLogs);
+
+        function filterLogs() {
+            const processFilter = document.getElementById('filter-process').value.toLowerCase();
+            const syscallFilter = document.getElementById('filter-syscall').value.toLowerCase();
+            const statusFilter = document.getElementById('filter-status').value;
+            
+            const rows = document.querySelectorAll('#logs-table tr');
+            
+            rows.forEach(row => {
+                const processName = row.cells[1].textContent.toLowerCase();
+                const syscallName = row.cells[2].textContent.toLowerCase();
+                const status = row.classList.contains('success') ? 'success' : 'error';
+                
+                const processMatch = processName.includes(processFilter);
+                const syscallMatch = syscallName.includes(syscallFilter);
+                const statusMatch = statusFilter === '' || status === statusFilter;
+                
+                if (processMatch && syscallMatch && statusMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="{{ url_for('static', filename='js/logs.js') }}"></script>
+</body>
+</html>
